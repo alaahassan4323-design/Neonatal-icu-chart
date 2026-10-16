@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from markupsafe import Markup, escape
 
-from odoo import _, api, fields, models
+from odoo import Command, _, api, fields, models
 from odoo.exceptions import ValidationError
 
 from .assessment_spec import ASSESSMENT_COLUMNS, ASSESSMENT_FOOTER, SHIFTS, iter_assessment_items
@@ -237,6 +237,38 @@ class NicuChart(models.Model):
         if not self.env.context.get('nicu_skip_recompute') and (
                 {'present_weight', 'patient_id'} & set(vals)):
             self._recompute_grid()
+        return res
+
+    SECTION_FIELDS = {
+        'nursing': 'nursing_line_ids',
+        'vitals': 'vitals_line_ids',
+        'resp': 'resp_line_ids',
+        'iv': 'iv_line_ids',
+        'output': 'output_line_ids',
+    }
+
+    @api.model
+    def default_get(self, fields_list):
+        """Show every row of the paper chart already on a NEW chart, so the
+        nurse can start writing before the first save."""
+        res = super().default_get(fields_list)
+        for section, fname in self.SECTION_FIELDS.items():
+            if fname in fields_list:
+                res[fname] = [Command.create({
+                    'sequence': seq,
+                    'code': code,
+                    'section': sec,
+                    'name': label,
+                    'row_kind': kind,
+                    'side_label': side,
+                }) for seq, (code, sec, label, kind, side) in enumerate(ROW_TEMPLATE) if sec == section]
+        if 'catheter_ids' in fields_list:
+            res['catheter_ids'] = [Command.create({'sequence': seq, 'catheter_type': key})
+                                   for seq, (key, _label) in enumerate(CATHETER_TYPES)]
+        if 'shift_check_ids' in fields_list:
+            res['shift_check_ids'] = [Command.create({
+                'sequence': seq, 'name': name, 'label1': label1, 'label2': label2,
+            }) for seq, (name, label1, label2) in enumerate(SHIFT_CHECK_TEMPLATE)]
         return res
 
     def _init_template_rows(self):

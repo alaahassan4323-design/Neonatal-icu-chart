@@ -131,3 +131,29 @@
         }
     }
 }
+
+// Wide screens: Odoo puts the chatter on the side, which squeezes the
+// 24-hour grids. Keep the chatter under the chart instead.
+.o_nicu_form.o_xxl_form_view {
+    .o_form_renderer {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        overflow: auto;
+    }
+    .o_form_sheet_bg {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 auto !important;
+        overflow: visible !important;
+    }
+    .o-mail-Form-chatter.o-aside {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 auto !important;
+        border-left: 0 !important;
+        border-top: 1px solid #dee2e6;
+    }
+}
+.o_nicu_form .o_form_sheet {
+    max-width: none !important;
+}

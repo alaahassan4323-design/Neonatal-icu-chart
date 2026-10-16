@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo database only: one baby with a fully filled chart -->
+    <function model="nicu.chart" name="_create_sample_data"/>
+</odoo>

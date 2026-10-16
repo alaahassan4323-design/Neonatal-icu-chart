@@ -21,10 +21,14 @@ identical in structure:
     'data': [
         'security/nicu_security.xml',
         'security/ir.model.access.csv',
+        'data/nicu_actions.xml',
         'report/nicu_chart_report.xml',
         'views/res_partner_views.xml',
         'views/nicu_chart_views.xml',
         'views/menus.xml',
+    ],
+    'demo': [
+        'demo/nicu_demo.xml',
     ],
     'assets': {
         'web.assets_backend': [

@@ -7,4 +7,8 @@
               action="action_nicu_chart" sequence="10"/>
     <menuitem id="menu_nicu_patients" name="Patients" parent="menu_nicu_root"
               action="action_nicu_patient" sequence="20"/>
+    <menuitem id="menu_nicu_config" name="Configuration" parent="menu_nicu_root"
+              sequence="90" groups="group_nicu_manager"/>
+    <menuitem id="menu_nicu_load_sample" name="Load Sample Chart" parent="menu_nicu_config"
+              action="action_server_load_sample" sequence="10"/>
 </odoo>

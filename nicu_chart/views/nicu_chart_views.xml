@@ -111,33 +111,36 @@
                             </div>
                             <field name="nursing_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
   <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
-    <field name="row_kind" column_invisible="1"/>
-    <field name="code" column_invisible="1"/>
-    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
-    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="sequence" column_invisible="1" force_save="1"/>
+    <field name="row_kind" column_invisible="1" force_save="1"/>
+    <field name="section" column_invisible="1" force_save="1"/>
+    <field name="code" column_invisible="1" force_save="1"/>
+    <field name="side_label" column_invisible="1" force_save="1"/>
+    <field name="name" string="TIME" width="150px" readonly="1" force_save="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="46px" readonly="row_kind == 'total'"/>
   </list>
 </field>
                             <div class="o_nicu_band mt-3">VITAL SIGNS</div>
@@ -151,34 +154,36 @@
 </div>
                             <field name="vitals_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
   <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
-    <field name="row_kind" column_invisible="1"/>
-    <field name="code" column_invisible="1"/>
-    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
-    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
-    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="sequence" column_invisible="1" force_save="1"/>
+    <field name="row_kind" column_invisible="1" force_save="1"/>
+    <field name="section" column_invisible="1" force_save="1"/>
+    <field name="code" column_invisible="1" force_save="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" force_save="1" class="o_nicu_side"/>
+    <field name="name" string="TIME" width="150px" readonly="1" force_save="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="46px" readonly="row_kind == 'total'"/>
   </list>
 </field>
                             <div class="o_nicu_graph">
@@ -191,7 +196,8 @@
                                     <div class="o_nicu_band">CATHETERS / LINES</div>
                                     <field name="catheter_ids" nolabel="1">
                                         <list editable="bottom" create="0" delete="0">
-                                            <field name="catheter_type" readonly="1"/>
+                                            <field name="sequence" column_invisible="1" force_save="1"/>
+                                            <field name="catheter_type" readonly="1" force_save="1"/>
                                             <field name="size"/>
                                             <field name="level"/>
                                             <field name="insertion_date"/>
@@ -217,34 +223,36 @@
                             </div>
                             <field name="resp_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
   <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
-    <field name="row_kind" column_invisible="1"/>
-    <field name="code" column_invisible="1"/>
-    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
-    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
-    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="sequence" column_invisible="1" force_save="1"/>
+    <field name="row_kind" column_invisible="1" force_save="1"/>
+    <field name="section" column_invisible="1" force_save="1"/>
+    <field name="code" column_invisible="1" force_save="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" force_save="1" class="o_nicu_side"/>
+    <field name="name" string="TIME" width="150px" readonly="1" force_save="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="46px" readonly="row_kind == 'total'"/>
   </list>
 </field>
                         </page>
@@ -252,69 +260,73 @@
                             <div class="text-muted small mb-1">Write the infusion / drug name in the <b>IV / Medication</b> column of the "SITE/IV check" row of each block. TOTAL rows, TOTAL INTAKE, URINE OUTPUT and FLUID BALANCE are calculated automatically.</div>
                             <field name="iv_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
   <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
-    <field name="row_kind" column_invisible="1"/>
-    <field name="code" column_invisible="1"/>
-    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="sequence" column_invisible="1" force_save="1"/>
+    <field name="row_kind" column_invisible="1" force_save="1"/>
+    <field name="section" column_invisible="1" force_save="1"/>
+    <field name="code" column_invisible="1" force_save="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" force_save="1" class="o_nicu_side"/>
     <field name="note" string="IV / Medication" width="110px"/>
-    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
-    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="name" string="TIME" width="150px" readonly="1" force_save="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="46px" readonly="row_kind == 'total'"/>
   </list>
 </field>
                             <div class="o_nicu_band mt-3">OUTPUT &amp; FLUID BALANCE</div>
                             <field name="output_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
   <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
-    <field name="row_kind" column_invisible="1"/>
-    <field name="code" column_invisible="1"/>
-    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="sequence" column_invisible="1" force_save="1"/>
+    <field name="row_kind" column_invisible="1" force_save="1"/>
+    <field name="section" column_invisible="1" force_save="1"/>
+    <field name="code" column_invisible="1" force_save="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" force_save="1" class="o_nicu_side"/>
     <field name="note" string="Frequency / Measure" width="110px"/>
-    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
-    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
-    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="name" string="TIME" width="150px" readonly="1" force_save="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="46px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="46px" readonly="row_kind == 'total'"/>
   </list>
 </field>
                         </page>
@@ -324,11 +336,12 @@
                                     <div class="o_nicu_band">SHIFT CHECK</div>
                                     <field name="shift_check_ids" nolabel="1">
                                         <list editable="bottom" create="0" delete="0">
+                                            <field name="sequence" column_invisible="1" force_save="1"/>
                                             <field name="day_check" string="DAY" width="80px"/>
-                                            <field name="name" string="SHIFT CHECK" readonly="1"/>
-                                            <field name="label1" string=" " readonly="1" width="50px"/>
+                                            <field name="name" string="SHIFT CHECK" readonly="1" force_save="1"/>
+                                            <field name="label1" string=" " readonly="1" force_save="1" width="50px"/>
                                             <field name="value1" string=" " width="100px"/>
-                                            <field name="label2" string=" " readonly="1" width="45px"/>
+                                            <field name="label2" string=" " readonly="1" force_save="1" width="45px"/>
                                             <field name="value2" string=" " width="100px"/>
                                             <field name="night_check" string="NIGHT" width="80px"/>
                                         </list>
