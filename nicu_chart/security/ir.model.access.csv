@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nicu_chart_nurse,nicu_chart nurse,model_nicu_chart,group_nicu_nurse,1,1,1,0
+access_nicu_chart_manager,nicu_chart manager,model_nicu_chart,group_nicu_manager,1,1,1,1
+access_nicu_chart_line_nurse,nicu_chart_line nurse,model_nicu_chart_line,group_nicu_nurse,1,1,1,0
+access_nicu_chart_line_manager,nicu_chart_line manager,model_nicu_chart_line,group_nicu_manager,1,1,1,1
+access_nicu_chart_catheter_nurse,nicu_chart_catheter nurse,model_nicu_chart_catheter,group_nicu_nurse,1,1,1,0
+access_nicu_chart_catheter_manager,nicu_chart_catheter manager,model_nicu_chart_catheter,group_nicu_manager,1,1,1,1
+access_nicu_chart_shift_check_nurse,nicu_chart_shift_check nurse,model_nicu_chart_shift_check,group_nicu_nurse,1,1,1,0
+access_nicu_chart_shift_check_manager,nicu_chart_shift_check manager,model_nicu_chart_shift_check,group_nicu_manager,1,1,1,1
+access_nicu_chart_note_nurse,nicu_chart_note nurse,model_nicu_chart_note,group_nicu_nurse,1,1,1,1
+access_nicu_chart_note_manager,nicu_chart_note manager,model_nicu_chart_note,group_nicu_manager,1,1,1,1

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_nicu_a3" model="report.paperformat">
+        <field name="name">NICU Chart A3 Landscape</field>
+        <field name="default" eval="False"/>
+        <field name="format">A3</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="disable_shrinking" eval="False"/>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_nicu_chart" model="ir.actions.report">
+        <field name="name">Neonatal ICU Chart</field>
+        <field name="model">nicu.chart</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nicu_chart.report_nicu_chart</field>
+        <field name="report_file">nicu_chart.report_nicu_chart</field>
+        <field name="print_report_name">'NICU Chart - %s' % (object.name or '')</field>
+        <field name="paperformat_id" ref="paperformat_nicu_a3"/>
+        <field name="binding_model_id" ref="model_nicu_chart"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ===================================================== styles -->
+    <template id="report_nicu_chart_style">
+        <style>
+            .nicu { font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; font-size: 9.5px; color: #111; }
+            .nicu table { border-collapse: collapse; table-layout: fixed; }
+            .nicu td, .nicu th { border: 0.6px solid #666; padding: 0 1px; height: 24px; overflow: hidden;
+                                 white-space: nowrap; text-align: center; vertical-align: middle; }
+            .nicu th, .nicu .band { background: #d4d4d4; font-weight: bold; }
+            .nicu .lbl { text-align: left; background: #efefef; font-weight: bold; padding-left: 2px; font-size: 7.6px; }
+            .nicu .side { color: #b03030; font-size: 7px; font-weight: normal; display: block; }
+            .nicu .tot td { background: #e4e4e4; font-weight: bold; }
+            .nicu .leg { text-align: left; vertical-align: top; white-space: normal; padding: 2px; font-size: 8.5px; }
+            .nicu .leg table td { border: 0.5px solid #999; height: auto; text-align: left; vertical-align: top; white-space: normal; padding: 1px; font-size: 7px; line-height: 9px; }
+            .nicu .leg .cath td { text-align: center; font-size: 6.5px; height: 16px; padding: 0; }
+            .nicu .red { color: #c0392b; font-weight: bold; }
+            .nicu .note { text-align: left; vertical-align: top; white-space: normal; font-style: italic; padding: 1px 2px; }
+            .nicu .pid { border: none; vertical-align: top; text-align: left; white-space: normal; padding: 0 5px; height: auto; }
+            .nicu .pid .brand { text-align: center; color: #3a8fc7; font-size: 20px; font-weight: bold; letter-spacing: 2px; }
+            .nicu .pid .title { text-align: center; font-size: 17px; font-weight: bold; line-height: 20px; }
+            .nicu .pid .big { text-align: center; font-size: 27px; font-weight: bold; margin: 2px 0 6px; }
+            .nicu .pid .f { border-bottom: 0.6px solid #666; margin: 0 0 5px; font-size: 10px; min-height: 14px; white-space: normal; }
+            .nicu .pid .f b { font-weight: normal; color: #333; }
+            .nicu .pid .f span { font-family: "DejaVu Sans Mono", monospace; color: #003a80; }
+            .nicu .pid .h { font-weight: bold; margin: 10px 0 4px; font-size: 11px; }
+            .nicu .hv { color: #003a80; }
+            td.hv { font-size: 8.3px; letter-spacing: -0.2px; }
+            .nicu .chk { display: inline-block; width: 8px; height: 8px; border: 0.8px solid #333; margin-right: 3px;
+                         vertical-align: middle; text-align: center; line-height: 8px; font-size: 8px; font-weight: bold; }
+            .nicu .assess td { border: none; text-align: left; vertical-align: top; white-space: normal; height: auto; padding: 1px 2px; }
+            .nicu .assess .ah { font-weight: bold; margin-top: 2px; }
+            .nicu .assess .it { font-size: 9px; line-height: 12.5px; }
+            .nicu .assess .sub { font-style: italic; font-weight: bold; font-size: 8.5px; }
+            .nicu .prog td { text-align: left; white-space: normal; vertical-align: top; height: 15px; }
+            .nicu .prog th { height: 16px; }
+            .page-break { page-break-before: always; }
+            .nicu .shiftchk td { font-size: 8.3px; white-space: normal; height: 20px; }
+            .nicu th { white-space: normal; }
+        </style>
+    </template>
+
+    <!-- ===================================================== main -->
+    <template id="report_nicu_chart">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="nicu_chart.report_nicu_chart_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_nicu_chart_document">
+        <t t-call="web.basic_layout">
+            <t t-call="nicu_chart.report_nicu_chart_style"/>
+            <t t-set="hours" t-value="o.get_hours()"/>
+            <t t-set="hfields" t-value="o.get_hour_fields()"/>
+            <!-- ======================= SIDE 1 ======================= -->
+            <div class="page nicu">
+                <table style="width: 100%; border: none;">
+                    <tr>
+                        <!-- ============ LEFT: nursing care / vital signs / ventilation -->
+                        <td style="width: 48%; border: none; padding: 0; vertical-align: top;">
+                            <table style="width: 100%;">
+                                <colgroup>
+                                    <col style="width: 15.2%"/>
+                                    <col style="width: 14.2%"/>
+                                    <t t-foreach="hours" t-as="h"><col style="width: 2.94%"/></t>
+                                </colgroup>
+                                <tr>
+                                    <th>NURSING CARE</th>
+                                    <th>TIME</th>
+                                    <t t-foreach="hours" t-as="h"><th><t t-out="h"/>H</th></t>
+                                </tr>
+                                <t t-set="nursing" t-value="o.get_rows('nursing')"/>
+                                <t t-foreach="nursing" t-as="row">
+                                    <tr>
+                                        <td t-if="row_first" t-att-rowspan="len(nursing)" class="leg">
+                                            <table style="width: 100%;">
+                                                <tr><td><b><u>COLOR:</u></b></td><td><b><u>ACTIVITY:</u></b></td><td><b><u>RESP. EFFORT:</u></b></td></tr>
+                                                <tr>
+                                                    <td>P-Pink<br/>PL-Pale<br/>J-Jaundiced<br/>C-Cyanosis<br/>PLE-Plethoric<br/>M-Mottled<br/>D-Dusky</td>
+                                                    <td>C-Comatose<br/>QS-Quiet Sleep<br/>AS-Active Sleep<br/>QA-Quiet Alert<br/>AA-Active Alert<br/>L-Lethargic<br/>S-Sedated</td>
+                                                    <td rowspan="3">E-Easy<br/>SS-Substernal<br/>IC-Intercostal<br/>GR-Grunting<br/>NF-Nasal Flaring<br/>M-Mild<br/>MOD-Moderate<br/>S-Severe</td>
+                                                </tr>
+                                                <tr><td colspan="2"><b><u>POSITION</u></b></td></tr>
+                                                <tr><td>S-Supine<br/>P-Prone</td><td>LL-Left Lateral<br/>RL-Right Lateral</td></tr>
+                                            </table>
+                                        </td>
+                                        <td class="lbl"><t t-out="row.name"/></td>
+                                        <t t-foreach="hfields" t-as="f"><td class="hv"><t t-out="row[f] or ''"/></td></t>
+                                    </tr>
+                                </t>
+                                <!-- vital signs graph -->
+                                <tr>
+                                    <td class="leg">
+                                        <div><b>NTE RANGE</b> <span style="border: 0.6px solid #666; padding: 0 6px;" class="hv"><t t-out="o.nte_range or '&#160;&#160;&#160;&#160;'"/></span></div>
+                                        <div style="margin-top: 4px;"><b><u>VITAL SIGNS:</u></b></div>
+                                        <div><span class="red">&#9679;</span> Heart Rate &#160; <b>&#8226;</b> Respiratory Rate</div>
+                                        <div><span style="color:#1f5fa8">&#9632;</span> Temperature &#160; <b>&#8597;</b> Blood Pressure</div>
+                                        <div class="red" style="text-align: center; margin-top: 5px;">ALARM LIMITS</div>
+                                        <table style="width: 100%;">
+                                            <tr><td class="red" style="width: 45%;">HEART RATE</td><td class="hv"><t t-out="o.hr_alarm_low or ''"/></td><td class="hv"><t t-out="o.hr_alarm_high or ''"/></td></tr>
+                                            <tr><td>RESP. RATE</td><td class="hv"><t t-out="o.rr_alarm_low or ''"/></td><td class="hv"><t t-out="o.rr_alarm_high or ''"/></td></tr>
+                                            <tr><td class="red">O2 SATURATION</td><td class="hv"><t t-out="o.spo2_alarm_low or ''"/></td><td class="hv"><t t-out="o.spo2_alarm_high or ''"/></td></tr>
+                                            <tr><td>MEAN BP</td><td colspan="2" class="hv"><t t-out="o.mean_bp_alarm or ''"/></td></tr>
+                                        </table>
+                                        <div class="red" style="margin-top: 5px;">ACCEPTABLE BLOOD GAS PARAMETERS</div>
+                                        <div>
+                                            <span class="chk"><t t-if="o.blood_gas_type == 'arterial'">X</t></span>ARTERIAL
+                                            <span class="chk"><t t-if="o.blood_gas_type == 'venous'">X</t></span>VENOUS
+                                            <span class="chk"><t t-if="o.blood_gas_type == 'capillary'">X</t></span>CAPILLARY
+                                        </div>
+                                        <table style="width: 100%;">
+                                            <tr><td style="width: 30%;">pH</td><td class="hv"><t t-out="o.gas_ph or ''"/></td></tr>
+                                            <tr><td>pCO2</td><td class="hv"><t t-out="o.gas_pco2 or ''"/></td></tr>
+                                            <tr><td>pO2</td><td class="hv"><t t-out="o.gas_po2 or ''"/></td></tr>
+                                            <tr><td>HCO3</td><td class="hv"><t t-out="o.gas_hco3 or ''"/></td></tr>
+                                        </table>
+                                        <div style="margin-top: 5px;"><b>OTHER INSTRUCTIONS:</b></div>
+                                        <div class="hv" style="white-space: pre-wrap;"><t t-out="o.other_instructions or ''"/></div>
+                                    </td>
+                                    <td colspan="25" style="padding: 0; vertical-align: top;">
+                                        <t t-out="o.get_report_graph()"/>
+                                    </td>
+                                </tr>
+                                <!-- ventilation -->
+                                <t t-set="resp" t-value="o.get_rows('resp')"/>
+                                <t t-foreach="resp" t-as="row">
+                                    <tr>
+                                        <td t-if="row_index == 0" rowspan="10" class="leg" style="padding: 0;">
+                                            <table class="cath" style="width: 100%;">
+                                                <tr><td style="width: 22%;"><b>Catheter</b></td><td style="width: 14%;"><b>Size</b></td><td style="width: 14%;"><b>Level</b></td><td style="width: 26%;"><b>Insertion Date</b></td><td><b>Duration</b></td></tr>
+                                                <tr t-foreach="o.catheter_ids" t-as="c">
+                                                    <td><t t-out="c.type_label"/></td>
+                                                    <td class="hv"><t t-out="c.size or ''"/></td>
+                                                    <td class="hv"><t t-out="c.level or ''"/></td>
+                                                    <td class="hv"><t t-out="c.insertion_date and c.insertion_date.strftime('%d/%m/%y') or ''"/></td>
+                                                    <td class="hv"><t t-out="c.duration or ''"/></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td t-if="row_index == 10" t-att-rowspan="len(resp) - 10" class="leg">
+                                            <table style="width: 100%;">
+                                                <tr><td><b>SUCTION</b><br/><u>Amount:</u><br/>SC-Scant<br/>S-Small<br/>M-Moderate<br/>L-Large<br/>
+                                                    <u>Color:</u><br/>CR-Creamy<br/>CL-Clear<br/>WH-White<br/>Y-Yellow<br/>G-Green<br/>S-Sanguinous<br/>
+                                                    <u>Consistency:</u><br/>LS-Loose<br/>TH-Thick<br/>PL-Plug</td>
+                                                    <td>
+                                                        <span class="red">*RESITE</span><br/><br/>
+                                                        FREQUENCY<br/><br/>SUCTION CATH. SIZE<br/><br/>
+                                                        Air entry = Equal / &#8595; Decreased<br/><br/>
+                                                        <span class="red">FREQUENCY</span><br/><br/>
+                                                        S-Single D-Double I-Intensive<br/><br/>
+                                                        Please refer to pain tool
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td class="lbl"><t t-out="row.name"/></td>
+                                        <t t-foreach="hfields" t-as="f"><td class="hv"><t t-out="row[f] or ''"/></td></t>
+                                    </tr>
+                                </t>
+                            </table>
+                        </td>
+
+                        <!-- ============ CENTER: patient I.D. -->
+                        <td class="pid" style="width: 9.5%;">
+                            <div class="brand">
+                                <img t-if="o.env.company.logo" t-att-src="image_data_uri(o.env.company.logo)" style="max-height: 34px; max-width: 100%;"/>
+                                <t t-else="" t-out="o.env.company.name"/>
+                            </div>
+                            <div class="title">NEONATAL<br/>ICU CHART</div>
+                            <div class="big">PATIENT I.D.</div>
+                            <div class="f"><b>Date:</b> <span t-out="o.date and o.date.strftime('%d/%m/%Y') or ''"/></div>
+                            <div style="height: 6px;"/>
+                            <div class="f"><b>Name:</b> <span t-out="o.patient_id.name or ''"/></div>
+                            <div class="f"><b>MRN:</b> <span t-out="o.mrn or ''"/></div>
+                            <div class="f"><b>Diagnosis:</b> <span t-out="o.diagnosis or ''"/></div>
+                            <div class="f"><b>Consultant:</b> <span t-out="o.consultant or ''"/></div>
+                            <div style="height: 6px;"/>
+                            <div class="f"><b>Date of Birth:</b> <span t-out="o.date_of_birth and o.date_of_birth.strftime('%d/%m/%Y') or ''"/></div>
+                            <div class="f"><b>Age in days:</b> <span t-out="o.age_days and ('Day %s' % o.age_days) or ''"/></div>
+                            <div class="f"><b>Gestational age:</b> <span t-if="o.ga_weeks" t-out="'%s weeks + %s days' % (o.ga_weeks, o.ga_days or 0)"/></div>
+                            <div class="f"><b>Corrected Age:</b> <span t-out="o.corrected_age or ''"/></div>
+                            <div style="height: 6px;"/>
+                            <div class="f"><b>Birth weight:</b> <span t-if="o.birth_weight" t-out="'%g gm' % o.birth_weight"/></div>
+                            <div class="f"><b>Present weight:</b> <span t-if="o.present_weight" t-out="'%g gm' % o.present_weight"/></div>
+                            <div class="f"><b>Previous weight:</b> <span t-if="o.previous_weight" t-out="'%g gm' % o.previous_weight"/></div>
+                            <div class="f"><b>Change:</b> <span t-out="o.weight_change or ''"/></div>
+                            <div class="f"><b>Head circumference:</b> <span t-if="o.head_circumference" t-out="'%g cm' % o.head_circumference"/></div>
+                            <div class="f"><b>Blood group:</b> <span t-out="o.blood_group or ''"/></div>
+                            <div class="f"><b>Parent last visit:</b> <span t-out="o.parent_last_visit and o.parent_last_visit.strftime('%d/%m/%Y') or ''"/></div>
+                            <div class="f"><b>EBM given:</b>
+                                <span class="chk"><t t-if="o.ebm_given == 'yes'">X</t></span>Yes
+                                <span t-if="o.ebm_given == 'yes' and o.ebm_ml" t-out="'%g' % o.ebm_ml"/> ml
+                                <span class="chk"><t t-if="o.ebm_given == 'no'">X</t></span>No</div>
+                            <div class="h">TOTAL FLUID INTAKE</div>
+                            <div class="f"><b>ml/kg/day:</b> <span t-if="o.tfi_ml_kg_day" t-out="'%g' % o.tfi_ml_kg_day"/></div>
+                            <div class="f"><b>ml/hr:</b> <span t-if="o.tfi_ml_hr" t-out="'%g' % o.tfi_ml_hr"/></div>
+                            <div class="f"><b>TPN:</b> <span t-out="o.tpn_ml_hr or ''"/> <b style="float: right;">ml/hr</b></div>
+                            <div class="f"><b>Intralipids:</b> <span t-out="o.intralipids_ml_hr or ''"/> <b style="float: right;">ml/hr</b></div>
+                            <div class="f"><b>Amended T.F.:</b> <span t-out="o.amended_tf or ''"/></div>
+                            <div class="h">24 HOUR SUMMARY:</div>
+                            <div class="f"><b>Total actual intake:</b> <span t-out="'%g' % o.total_actual_intake"/> <b style="float: right;">ml</b></div>
+                            <div class="f"><b>Total output:</b> <span t-out="'%g' % o.total_output"/> <b style="float: right;">ml</b></div>
+                            <div class="f"><b>Urine output:</b> <span t-out="'%g' % o.urine_output_rate"/> <b style="float: right;">ml/kg/hr</b></div>
+                            <div class="f"><b>Fluid balance:</b> <span t-out="'%g' % o.fluid_balance"/> <b style="float: right;">ml</b></div>
+                            <div class="f"><b>Total blood loss:</b> <span t-out="'%g' % o.total_blood_loss"/> <b style="float: right;">ml</b></div>
+                            <div class="h">INVESTIGATIONS:</div>
+                            <div class="hv" style="white-space: pre-wrap; font-size: 10px;"><t t-out="o.investigations or ''"/></div>
+                        </td>
+
+                        <!-- ============ RIGHT: IV / medications / output -->
+                        <td style="width: 41.3%; border: none; padding: 0; vertical-align: top;">
+                            <table style="width: 100%;">
+                                <colgroup>
+                                    <col style="width: 9.9%"/>
+                                    <col style="width: 12.8%"/>
+                                    <t t-foreach="hours" t-as="h"><col style="width: 3.22%"/></t>
+                                </colgroup>
+                                <tr>
+                                    <th colspan="2">IV/Medications/Blood Products</th>
+                                    <t t-foreach="hours" t-as="h"><th><t t-out="h"/>H</th></t>
+                                </tr>
+                                <t t-foreach="o.get_iv_blocks()" t-as="block">
+                                    <t t-foreach="block" t-as="row">
+                                        <tr t-att-class="'tot' if row.code == 'total_intake' else ''">
+                                            <td t-if="row_first and row.code != 'total_intake' and not row.code.startswith('flush') and row.code != 'bottling'"
+                                                t-att-rowspan="len(block)" class="note hv"><t t-out="block[0].note or ''"/></td>
+                                            <td t-if="row_first and row.code == 'flush_arterial'" t-att-rowspan="len(block)" class="note hv">
+                                                <t t-foreach="block" t-as="b"><t t-if="b.note"><t t-out="b.note"/><br/></t></t>
+                                            </td>
+                                            <td t-if="row.code in ('bottling', 'feed_amount', 'feed_total')" class="note" style="font-style: normal;">
+                                                <t t-if="row.code == 'bottling'">Type / Strength<br/></t>
+                                                <t t-if="row.code == 'feed_amount'">Frequency / Increment<br/></t>
+                                                <span class="hv" style="font-style: italic;" t-out="row.note or ''"/>
+                                            </td>
+                                            <td t-if="row.code == 'total_intake'"/>
+                                            <td class="lbl" t-att-style="'background:#d4d4d4' if row.row_kind == 'total' else ''"><t t-out="row.name"/></td>
+                                            <t t-foreach="hfields" t-as="f">
+                                                <td class="hv" t-att-style="'background:#ececec' if row.row_kind == 'total' else ''"><t t-out="row[f] or ''"/></td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-foreach="o.get_rows('output')" t-as="row">
+                                    <tr t-att-class="'tot' if row.code == 'fluid_balance' else ''">
+                                        <td class="note" style="font-style: normal;">
+                                            <span class="red" t-if="row.side_label in ('Measure',)" t-out="row.side_label"/>
+                                            <t t-elif="row.side_label"><t t-out="row.side_label"/></t>
+                                            <span t-if="row.note" class="hv" style="font-style: italic;"> <t t-out="row.note"/></span>
+                                        </td>
+                                        <td class="lbl" t-att-style="'background:#d4d4d4' if row.row_kind == 'total' else ''"><t t-out="row.name"/></td>
+                                        <t t-foreach="hfields" t-as="f">
+                                            <td class="hv" t-att-style="'background:#ececec' if row.row_kind == 'total' else ''"><t t-out="row[f] or ''"/></td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- ======================= SIDE 2 ======================= -->
+            <div class="page nicu page-break">
+                <table style="width: 100%; border: none;">
+                    <tr>
+                        <!-- physical assessment -->
+                        <td style="width: 34%; border: none; padding: 0; vertical-align: top; text-align: left;">
+                            <table class="shiftchk" style="width: 100%;">
+                                <colgroup><col style="width: 10%"/><col style="width: 54%"/><col style="width: 10%"/><col style="width: 26%"/></colgroup>
+                                <tr><th colspan="4" style="font-size: 10px;">PHYSICAL ASSESSMENT</th></tr>
+                                <tr>
+                                    <th>DAY</th>
+                                    <th>SHIFT CHECK</th>
+                                    <th>NIGHT</th>
+                                    <th style="white-space: normal;">SPECIAL INSTRUCTIONS</th>
+                                </tr>
+                                <t t-foreach="o.shift_check_ids" t-as="sc">
+                                    <tr>
+                                        <td class="hv"><t t-out="sc.day_check or ''"/></td>
+                                        <td style="text-align: left;">
+                                            <t t-out="sc.name"/>
+                                            <t t-if="sc.label1 and sc.label1 not in ('Done', 'Date')">: <t t-out="sc.label1"/></t>
+                                            <span class="hv"> <t t-out="sc.value1 or ''"/></span>
+                                            <span t-if="sc.label2" style="float: right; width: 28%; border-left: 0.6px solid #666; padding-left: 2px;"><t t-out="sc.label2"/>: <span class="hv" t-out="sc.value2 or ''"/></span>
+                                        </td>
+                                        <td class="hv"><t t-out="sc.night_check or ''"/></td>
+                                        <td t-if="sc_first" t-att-rowspan="len(o.shift_check_ids)" class="note hv" style="white-space: pre-wrap; font-style: normal;"><t t-out="o.special_instructions or ''"/></td>
+                                    </tr>
+                                </t>
+                            </table>
+                            <t t-foreach="[('day', 'DAY'), ('night', 'NIGHT')]" t-as="shift">
+                                <t t-set="p" t-value="shift[0] + '_'"/>
+                                <table style="width: 100%; margin-top: 2px;">
+                                    <tr><th style="font-size: 8px;"><t t-out="shift[1]"/></th></tr>
+                                    <tr><td style="padding: 0; height: auto;">
+                                        <table class="assess" style="width: 100%;">
+                                            <tr>
+                                                <t t-foreach="o.get_assessment_columns()" t-as="column">
+                                                    <td style="width: 25%;">
+                                                        <t t-foreach="column" t-as="grp">
+                                                            <div class="ah"><t t-out="grp[0]"/></div>
+                                                            <t t-foreach="grp[1]" t-as="it">
+                                                                <div t-if="it[2] == 'sub'" class="sub"><t t-out="it[1]"/></div>
+                                                                <div t-elif="it[2] == 'bool'" class="it"><span class="chk"><t t-if="o[p + it[0]]">X</t></span><t t-out="it[1]"/></div>
+                                                                <div t-elif="it[2] == 'date'" class="it"><t t-out="it[1]"/>: <span class="hv" t-out="o[p + it[0]] and o[p + it[0]].strftime('%d/%m/%y') or '______'"/></div>
+                                                                <div t-else="" class="it"><t t-out="it[1]"/>: <span class="hv" t-out="o[p + it[0]] or '______'"/></div>
+                                                            </t>
+                                                        </t>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr><td colspan="4" class="it"><b>*Comments:</b> <span class="hv" t-out="o[p + 'comments'] or ''"/></td></tr>
+                                        </table>
+                                    </td></tr>
+                                    <tr><td style="text-align: left; padding: 0;">
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td style="text-align: left; width: 18%;"><b>Date:</b> <span class="hv" t-out="o[p + 'sign_date'] and o[p + 'sign_date'].strftime('%d/%m/%y') or ''"/></td>
+                                                <td style="text-align: left; width: 15%;"><b>Time:</b> <span class="hv" t-out="o[p + 'sign_time'] or ''"/></td>
+                                                <td style="text-align: left; width: 30%;"><b>Name:</b> <span class="hv" t-out="o[p + 'nurse_name'] or ''"/></td>
+                                                <td style="text-align: left; width: 20%;"><b>Signature:</b> <span class="hv" t-out="o[p + 'signature'] or ''"/></td>
+                                                <td style="text-align: left;"><b>Job No.</b> <span class="hv" t-out="o[p + 'job_no'] or ''"/></td>
+                                            </tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                            </t>
+                        </td>
+                        <!-- progress evaluation: two ruled columns like the paper -->
+                        <t t-foreach="o.get_note_columns()" t-as="col">
+                            <td style="width: 33%; border: none; padding: 0 0 0 8px; vertical-align: top;">
+                                <table class="prog" style="width: 100%;">
+                                    <tr>
+                                        <th style="width: 11%;">DATE</th>
+                                        <th style="width: 8%;">TIME</th>
+                                        <th>PROGRESS EVALUATION<br/><span style="font-weight: normal; font-size: 6px;">(each entry must be dated &amp; signed)</span></th>
+                                        <th style="width: 17%;">NURSE'S SIGNATURE</th>
+                                    </tr>
+                                    <tr t-foreach="col[0]" t-as="n">
+                                        <td class="hv"><t t-out="n.date and n.date.strftime('%d/%m/%y') or ''"/></td>
+                                        <td class="hv"><t t-out="n.time or ''"/></td>
+                                        <td class="hv" style="white-space: pre-wrap;"><t t-out="n.note or ''"/></td>
+                                        <td class="hv"><t t-out="n.signature or ''"/></td>
+                                    </tr>
+                                    <tr t-foreach="range(col[1])" t-as="blank"><td/><td/><td/><td/></tr>
+                                </table>
+                            </td>
+                        </t>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

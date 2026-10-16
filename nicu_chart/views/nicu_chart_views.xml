@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_nicu_chart_form" model="ir.ui.view">
+        <field name="name">nicu.chart.form</field>
+        <field name="model">nicu.chart</field>
+        <field name="arch" type="xml">
+            <form string="Neonatal ICU Chart" class="o_nicu_form">
+                <header>
+                    <button name="action_print_chart" type="object" string="Print Chart" class="btn-primary" icon="fa-print"/>
+                    <button name="action_next_day_chart" type="object" string="Next Day Chart" icon="fa-calendar-plus-o"/>
+                    <button name="action_recompute" type="object" string="Recalculate Totals" icon="fa-calculator"/>
+                </header>
+                <sheet>
+                    <div class="oe_title o_nicu_header">
+                        <div class="o_nicu_brand">NEONATAL ICU CHART</div>
+                        <h1>PATIENT I.D. &#8212; <field name="name" readonly="1" class="d-inline"/></h1>
+                    </div>
+                    <group name="patient_id_block">
+                        <group string="Patient I.D.">
+                            <field name="date"/>
+                            <field name="patient_id" context="{'default_is_nicu_patient': True}" options="{'no_quick_create': True}"/>
+                            <field name="mrn"/>
+                            <field name="diagnosis"/>
+                            <field name="consultant"/>
+                            <field name="date_of_birth"/>
+                            <field name="age_days"/>
+                            <label for="ga_weeks" string="Gestational age"/>
+                            <div class="o_row">
+                                <field name="ga_weeks" class="oe_inline"/> weeks +
+                                <field name="ga_days" class="oe_inline"/> days
+                            </div>
+                            <field name="corrected_age"/>
+                        </group>
+                        <group string="Weights">
+                            <field name="birth_weight"/>
+                            <field name="present_weight"/>
+                            <field name="previous_weight"/>
+                            <field name="weight_change"/>
+                            <field name="head_circumference"/>
+                            <field name="blood_group"/>
+                            <field name="parent_last_visit"/>
+                            <label for="ebm_given"/>
+                            <div class="o_row">
+                                <field name="ebm_given" widget="radio" options="{'horizontal': true}"/>
+                                <field name="ebm_ml" class="oe_inline" invisible="ebm_given != 'yes'"/>
+                                <span invisible="ebm_given != 'yes'">ml</span>
+                            </div>
+                        </group>
+                        <group string="Total Fluid Intake">
+                            <field name="tfi_ml_kg_day"/>
+                            <field name="tfi_ml_hr"/>
+                            <field name="tpn_ml_hr"/>
+                            <field name="intralipids_ml_hr"/>
+                            <field name="amended_tf"/>
+                        </group>
+                        <group string="24 Hour Summary">
+                            <field name="total_actual_intake"/>
+                            <field name="total_output"/>
+                            <field name="urine_output_rate"/>
+                            <field name="fluid_balance"/>
+                            <field name="total_blood_loss"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="investigations" placeholder="Investigations..."/>
+                    </group>
+                    <notebook>
+                        <page string="Nursing Care &amp; Vital Signs" name="flowsheet">
+                            <div class="row g-3 mb-2">
+                                <div class="col-12 col-lg-4">
+                                    <div class="o_nicu_band">NURSING CARE</div>
+                                    
+<div class="o_nicu_legend">
+  <table>
+    <tr><th>COLOR</th><th>ACTIVITY</th><th>RESP. EFFORT</th></tr>
+    <tr>
+      <td>P-Pink<br/>PL-Pale<br/>J-Jaundiced<br/>C-Cyanosis<br/>PLE-Plethoric<br/>M-Mottled<br/>D-Dusky</td>
+      <td>C-Comatose<br/>QS-Quiet Sleep<br/>AS-Active Sleep<br/>QA-Quiet Alert<br/>AA-Active Alert<br/>L-Lethargic<br/>S-Sedated</td>
+      <td>E-Easy<br/>SS-Substernal<br/>IC-Intercostal<br/>GR-Grunting<br/>NF-Nasal Flaring<br/>M-Mild<br/>MOD-Moderate<br/>S-Severe</td>
+    </tr>
+    <tr><th colspan="3">POSITION</th></tr>
+    <tr><td>S-Supine<br/>P-Prone</td><td colspan="2">LL-Left Lateral<br/>RL-Right Lateral</td></tr>
+  </table>
+</div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="o_nicu_band">ALARM LIMITS</div>
+                                    <group class="o_nicu_compact">
+                                        <field name="nte_range"/>
+                                        <label for="hr_alarm_low" string="Heart rate"/>
+                                        <div class="o_row"><field name="hr_alarm_low"/><field name="hr_alarm_high"/></div>
+                                        <label for="rr_alarm_low" string="Resp. rate"/>
+                                        <div class="o_row"><field name="rr_alarm_low"/><field name="rr_alarm_high"/></div>
+                                        <label for="spo2_alarm_low" string="O2 saturation"/>
+                                        <div class="o_row"><field name="spo2_alarm_low"/><field name="spo2_alarm_high"/></div>
+                                        <field name="mean_bp_alarm"/>
+                                    </group>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="o_nicu_band">ACCEPTABLE BLOOD GAS PARAMETERS</div>
+                                    <group class="o_nicu_compact">
+                                        <field name="blood_gas_type" widget="radio" options="{'horizontal': true}"/>
+                                        <field name="gas_ph"/>
+                                        <field name="gas_pco2"/>
+                                        <field name="gas_po2"/>
+                                        <field name="gas_hco3"/>
+                                        <field name="other_instructions"/>
+                                    </group>
+                                </div>
+                            </div>
+                            <field name="nursing_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
+  <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
+    <field name="row_kind" column_invisible="1"/>
+    <field name="code" column_invisible="1"/>
+    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+  </list>
+</field>
+                            <div class="o_nicu_band mt-3">VITAL SIGNS</div>
+                            
+<div class="o_nicu_vital_legend">
+  <span><b style="color:#c0392b">&#9679;</b> Heart Rate</span>
+  <span><b>&#8226;</b> Respiratory Rate</span>
+  <span><b style="color:#1f5fa8">&#9632;</b> Temperature</span>
+  <span><b>&#8597;</b> Blood Pressure (Sys/Dia(Mean))</span>
+  <span class="text-muted">Write BP as 60/35(45). The graph is drawn automatically from the HR / RR / BP / TEMP rows.</span>
+</div>
+                            <field name="vitals_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
+  <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
+    <field name="row_kind" column_invisible="1"/>
+    <field name="code" column_invisible="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+  </list>
+</field>
+                            <div class="o_nicu_graph">
+                                <field name="vitals_graph" readonly="1" nolabel="1"/>
+                            </div>
+                        </page>
+                        <page string="Ventilation / Respiratory" name="respiratory">
+                            <div class="row g-3 mb-2">
+                                <div class="col-12 col-lg-6">
+                                    <div class="o_nicu_band">CATHETERS / LINES</div>
+                                    <field name="catheter_ids" nolabel="1">
+                                        <list editable="bottom" create="0" delete="0">
+                                            <field name="catheter_type" readonly="1"/>
+                                            <field name="size"/>
+                                            <field name="level"/>
+                                            <field name="insertion_date"/>
+                                            <field name="duration"/>
+                                        </list>
+                                    </field>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="o_nicu_band">SUCTION</div>
+                                    
+<div class="o_nicu_legend">
+  <table>
+    <tr><th>SUCTION Amount</th><th>Color</th><th>Consistency</th></tr>
+    <tr>
+      <td>SC-Scant<br/>S-Small<br/>M-Moderate<br/>L-Large</td>
+      <td>CR-Creamy<br/>CL-Clear<br/>WH-White<br/>Y-Yellow<br/>G-Green<br/>S-Sanguinous</td>
+      <td>LS-Loose<br/>TH-Thick<br/>PL-Plug</td>
+    </tr>
+    <tr><td colspan="3">Air entry: = Equal, &#8595; Decreased &#160;|&#160; Chest physiotherapy: S-Single, D-Double, I-Intensive &#160;|&#160; Pain score: please refer to pain tool</td></tr>
+  </table>
+</div>
+                                </div>
+                            </div>
+                            <field name="resp_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
+  <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
+    <field name="row_kind" column_invisible="1"/>
+    <field name="code" column_invisible="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+  </list>
+</field>
+                        </page>
+                        <page string="IV / Medications / Blood Products" name="iv">
+                            <div class="text-muted small mb-1">Write the infusion / drug name in the <b>IV / Medication</b> column of the "SITE/IV check" row of each block. TOTAL rows, TOTAL INTAKE, URINE OUTPUT and FLUID BALANCE are calculated automatically.</div>
+                            <field name="iv_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
+  <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
+    <field name="row_kind" column_invisible="1"/>
+    <field name="code" column_invisible="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="note" string="IV / Medication" width="110px"/>
+    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+  </list>
+</field>
+                            <div class="o_nicu_band mt-3">OUTPUT &amp; FLUID BALANCE</div>
+                            <field name="output_line_ids" nolabel="1" class="o_nicu_grid" mode="list">
+  <list editable="bottom" create="0" delete="0" decoration-bf="row_kind == 'total'" decoration-info="row_kind == 'total'">
+    <field name="row_kind" column_invisible="1"/>
+    <field name="code" column_invisible="1"/>
+    <field name="side_label" string=" " width="90px" readonly="1" class="o_nicu_side"/>
+    <field name="note" string="Frequency / Measure" width="110px"/>
+    <field name="name" string="TIME" width="150px" readonly="1" class="o_nicu_param"/>
+    <field name="h01" string="01H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h02" string="02H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h03" string="03H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h04" string="04H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h05" string="05H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h06" string="06H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h07" string="07H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h08" string="08H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h09" string="09H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h10" string="10H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h11" string="11H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h12" string="12H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h13" string="13H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h14" string="14H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h15" string="15H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h16" string="16H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h17" string="17H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h18" string="18H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h19" string="19H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h20" string="20H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h21" string="21H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h22" string="22H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h23" string="23H" width="38px" readonly="row_kind == 'total'"/>
+    <field name="h24" string="24H" width="38px" readonly="row_kind == 'total'"/>
+  </list>
+</field>
+                        </page>
+                        <page string="Physical Assessment" name="assessment">
+                            <div class="row g-3">
+                                <div class="col-12 col-xl-8">
+                                    <div class="o_nicu_band">SHIFT CHECK</div>
+                                    <field name="shift_check_ids" nolabel="1">
+                                        <list editable="bottom" create="0" delete="0">
+                                            <field name="day_check" string="DAY" width="80px"/>
+                                            <field name="name" string="SHIFT CHECK" readonly="1"/>
+                                            <field name="label1" string=" " readonly="1" width="50px"/>
+                                            <field name="value1" string=" " width="100px"/>
+                                            <field name="label2" string=" " readonly="1" width="45px"/>
+                                            <field name="value2" string=" " width="100px"/>
+                                            <field name="night_check" string="NIGHT" width="80px"/>
+                                        </list>
+                                    </field>
+                                </div>
+                                <div class="col-12 col-xl-4">
+                                    <div class="o_nicu_band">SPECIAL INSTRUCTIONS</div>
+                                    <field name="special_instructions" nolabel="1" class="o_nicu_special"/>
+                                </div>
+                            </div>
+                            <div class="o_nicu_assess">
+<div class="o_nicu_band">DAY</div>
+<div class="row g-2">
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">1. BED TYPE</div>
+<div class="o_nicu_chk"><field name="day_bed_incubator" nolabel="1"/><label for="day_bed_incubator" string="Incubator"/></div>
+<div class="o_nicu_chk"><field name="day_bed_servo" nolabel="1"/><label for="day_bed_servo" string="Servo (°C Baby Mode)"/></div>
+<div class="o_nicu_inline"><label for="day_bed_servo_temp" string="Servo °C"/><field name="day_bed_servo_temp" nolabel="1"/></div>
+<div class="o_nicu_chk"><field name="day_bed_manual" nolabel="1"/><label for="day_bed_manual" string="Manual (°C Air Mode)"/></div>
+<div class="o_nicu_inline"><label for="day_bed_manual_temp" string="Manual °C"/><field name="day_bed_manual_temp" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="day_bed_humidity" string="Humidity %"/><field name="day_bed_humidity" nolabel="1"/></div>
+<div class="o_nicu_chk"><field name="day_bed_radiant" nolabel="1"/><label for="day_bed_radiant" string="Radiant Warmer"/></div>
+<div class="o_nicu_chk"><field name="day_bed_skin_temp" nolabel="1"/><label for="day_bed_skin_temp" string="Skin Temp. Mode"/></div>
+<div class="o_nicu_chk"><field name="day_bed_cot" nolabel="1"/><label for="day_bed_cot" string="Cot"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">2. SKIN</div>
+<div class="o_nicu_chk"><field name="day_skin_intact" nolabel="1"/><label for="day_skin_intact" string="Intact"/></div>
+<div class="o_nicu_chk"><field name="day_skin_dry_warm" nolabel="1"/><label for="day_skin_dry_warm" string="Dry/Warm"/></div>
+<div class="o_nicu_chk"><field name="day_skin_diaphoretic" nolabel="1"/><label for="day_skin_diaphoretic" string="Diaphoretic"/></div>
+<div class="o_nicu_chk"><field name="day_skin_cracked" nolabel="1"/><label for="day_skin_cracked" string="Cracked/Peeling"/></div>
+<div class="o_nicu_chk"><field name="day_skin_oedema" nolabel="1"/><label for="day_skin_oedema" string="Oedema"/></div>
+<div class="o_nicu_chk"><field name="day_skin_lesions" nolabel="1"/><label for="day_skin_lesions" string="Lesions/Wounds*"/></div>
+<div class="o_nicu_chk"><field name="day_skin_bruising" nolabel="1"/><label for="day_skin_bruising" string="Bruising"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">3. COLOUR</div>
+<div class="o_nicu_chk"><field name="day_colour_pink" nolabel="1"/><label for="day_colour_pink" string="Pink"/></div>
+<div class="o_nicu_chk"><field name="day_colour_pale" nolabel="1"/><label for="day_colour_pale" string="Pale"/></div>
+<div class="o_nicu_chk"><field name="day_colour_dusky" nolabel="1"/><label for="day_colour_dusky" string="Dusky"/></div>
+<div class="o_nicu_chk"><field name="day_colour_mottled" nolabel="1"/><label for="day_colour_mottled" string="Mottled"/></div>
+<div class="o_nicu_chk"><field name="day_colour_jaundice" nolabel="1"/><label for="day_colour_jaundice" string="Jaundice"/></div>
+<div class="o_nicu_chk"><field name="day_colour_plethoric" nolabel="1"/><label for="day_colour_plethoric" string="Plethoric"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">4. EYES</div>
+<div class="o_nicu_chk"><field name="day_eyes_clear" nolabel="1"/><label for="day_eyes_clear" string="Clear"/></div>
+<div class="o_nicu_chk"><field name="day_eyes_discharge" nolabel="1"/><label for="day_eyes_discharge" string="Discharge"/></div>
+<div class="o_nicu_chk"><field name="day_eyes_puffy" nolabel="1"/><label for="day_eyes_puffy" string="Puffy"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">5. NEUROLOGIC/FONTANELLES</div>
+<div class="o_nicu_chk"><field name="day_neuro_soft_flat" nolabel="1"/><label for="day_neuro_soft_flat" string="Soft / Flat"/></div>
+<div class="o_nicu_chk"><field name="day_neuro_full_tense" nolabel="1"/><label for="day_neuro_full_tense" string="Full / Tense"/></div>
+<div class="o_nicu_chk"><field name="day_neuro_depressed" nolabel="1"/><label for="day_neuro_depressed" string="Depressed"/></div>
+<div class="o_nicu_chk"><field name="day_neuro_bulging" nolabel="1"/><label for="day_neuro_bulging" string="Bulging"/></div>
+<div class="o_nicu_inline"><label for="day_neuro_head_circ" string="Head Circumference (cm)"/><field name="day_neuro_head_circ" nolabel="1"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">6. TONE</div>
+<div class="o_nicu_chk"><field name="day_tone_wnl" nolabel="1"/><label for="day_tone_wnl" string="WNL for GA"/></div>
+<div class="o_nicu_chk"><field name="day_tone_hypotonic" nolabel="1"/><label for="day_tone_hypotonic" string="Hypotonic"/></div>
+<div class="o_nicu_chk"><field name="day_tone_flaccid" nolabel="1"/><label for="day_tone_flaccid" string="Flaccid"/></div>
+<div class="o_nicu_chk"><field name="day_tone_hypertonic" nolabel="1"/><label for="day_tone_hypertonic" string="Hypertonic"/></div>
+<div class="o_nicu_chk"><field name="day_tone_rigid" nolabel="1"/><label for="day_tone_rigid" string="Rigid"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">7. CAPILLARY REFILL</div>
+<div class="o_nicu_chk"><field name="day_cap_brisk" nolabel="1"/><label for="day_cap_brisk" string="Brisk"/></div>
+<div class="o_nicu_chk"><field name="day_cap_slow" nolabel="1"/><label for="day_cap_slow" string="Slow"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">8. CARDIOVASCULAR</div>
+<div class="o_nicu_sub">Heart sounds</div>
+<div class="o_nicu_chk"><field name="day_cv_regular" nolabel="1"/><label for="day_cv_regular" string="Regular"/></div>
+<div class="o_nicu_chk"><field name="day_cv_irregular" nolabel="1"/><label for="day_cv_irregular" string="Irregular"/></div>
+<div class="o_nicu_chk"><field name="day_cv_murmur" nolabel="1"/><label for="day_cv_murmur" string="Murmur"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">9. PULSES</div>
+<div class="o_nicu_sub">Brachial</div>
+<div class="o_nicu_chk"><field name="day_pulse_br_equal" nolabel="1"/><label for="day_pulse_br_equal" string="Equal"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_br_bounding" nolabel="1"/><label for="day_pulse_br_bounding" string="Bounding"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_br_weak" nolabel="1"/><label for="day_pulse_br_weak" string="Weak"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_br_strong" nolabel="1"/><label for="day_pulse_br_strong" string="Strong"/></div>
+<div class="o_nicu_sub">Femoral</div>
+<div class="o_nicu_chk"><field name="day_pulse_fe_equal" nolabel="1"/><label for="day_pulse_fe_equal" string="Equal"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_fe_bounding" nolabel="1"/><label for="day_pulse_fe_bounding" string="Bounding"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_fe_weak" nolabel="1"/><label for="day_pulse_fe_weak" string="Weak"/></div>
+<div class="o_nicu_chk"><field name="day_pulse_fe_strong" nolabel="1"/><label for="day_pulse_fe_strong" string="Strong"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">10. ABDOMEN</div>
+<div class="o_nicu_chk"><field name="day_abd_soft" nolabel="1"/><label for="day_abd_soft" string="Soft"/></div>
+<div class="o_nicu_chk"><field name="day_abd_firm" nolabel="1"/><label for="day_abd_firm" string="Firm"/></div>
+<div class="o_nicu_chk"><field name="day_abd_flat" nolabel="1"/><label for="day_abd_flat" string="Flat"/></div>
+<div class="o_nicu_chk"><field name="day_abd_distention" nolabel="1"/><label for="day_abd_distention" string="Distention"/></div>
+<div class="o_nicu_chk"><field name="day_abd_loops" nolabel="1"/><label for="day_abd_loops" string="Bowel Loops Visible"/></div>
+<div class="o_nicu_chk"><field name="day_abd_bs_present" nolabel="1"/><label for="day_abd_bs_present" string="Bowel Sounds Present"/></div>
+<div class="o_nicu_chk"><field name="day_abd_bs_absent" nolabel="1"/><label for="day_abd_bs_absent" string="Bowel Sounds Absent"/></div>
+<div class="o_nicu_chk"><field name="day_abd_redness" nolabel="1"/><label for="day_abd_redness" string="Redness Discoloration"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">11. SKIN RISK ASSESSMENT SCORE</div>
+<div class="o_nicu_inline"><label for="day_skin_risk_score" string="Score"/><field name="day_skin_risk_score" nolabel="1"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">12. RESPIRATORY</div>
+<div class="o_nicu_sub">Breath sounds</div>
+<div class="o_nicu_chk"><field name="day_resp_equal" nolabel="1"/><label for="day_resp_equal" string="Equal bilaterally"/></div>
+<div class="o_nicu_sub">R / L</div>
+<div class="o_nicu_chk"><field name="day_resp_unequal_r" nolabel="1"/><label for="day_resp_unequal_r" string="Unequal - R"/></div>
+<div class="o_nicu_chk"><field name="day_resp_unequal_l" nolabel="1"/><label for="day_resp_unequal_l" string="Unequal - L"/></div>
+<div class="o_nicu_chk"><field name="day_resp_clear_r" nolabel="1"/><label for="day_resp_clear_r" string="Clear - R"/></div>
+<div class="o_nicu_chk"><field name="day_resp_clear_l" nolabel="1"/><label for="day_resp_clear_l" string="Clear - L"/></div>
+<div class="o_nicu_chk"><field name="day_resp_crackles_r" nolabel="1"/><label for="day_resp_crackles_r" string="Crackles - R"/></div>
+<div class="o_nicu_chk"><field name="day_resp_crackles_l" nolabel="1"/><label for="day_resp_crackles_l" string="Crackles - L"/></div>
+<div class="o_nicu_chk"><field name="day_resp_rales_r" nolabel="1"/><label for="day_resp_rales_r" string="Rales - R"/></div>
+<div class="o_nicu_chk"><field name="day_resp_rales_l" nolabel="1"/><label for="day_resp_rales_l" string="Rales - L"/></div>
+<div class="o_nicu_chk"><field name="day_resp_chest_equal" nolabel="1"/><label for="day_resp_chest_equal" string="Equal chest movement"/></div>
+<div class="o_nicu_chk"><field name="day_resp_labored" nolabel="1"/><label for="day_resp_labored" string="Labored"/></div>
+<div class="o_nicu_chk"><field name="day_resp_unlabored" nolabel="1"/><label for="day_resp_unlabored" string="Unlaboured"/></div>
+<div class="o_nicu_chk"><field name="day_resp_shallow" nolabel="1"/><label for="day_resp_shallow" string="Shallow"/></div>
+<div class="o_nicu_chk"><field name="day_resp_grunting" nolabel="1"/><label for="day_resp_grunting" string="Grunting"/></div>
+<div class="o_nicu_chk"><field name="day_resp_flaring" nolabel="1"/><label for="day_resp_flaring" string="Nasal Flaring"/></div>
+<div class="o_nicu_sub">Retractions</div>
+<div class="o_nicu_chk"><field name="day_resp_retr_mild" nolabel="1"/><label for="day_resp_retr_mild" string="Mild"/></div>
+<div class="o_nicu_chk"><field name="day_resp_retr_moderate" nolabel="1"/><label for="day_resp_retr_moderate" string="Moderate"/></div>
+<div class="o_nicu_chk"><field name="day_resp_retr_severe" nolabel="1"/><label for="day_resp_retr_severe" string="Severe"/></div>
+<div class="o_nicu_inline"><label for="day_resp_last_cxr" string="Last chest x-ray"/><field name="day_resp_last_cxr" nolabel="1"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">13. FALL RISK ASSESSMENT</div>
+<div class="o_nicu_inline"><label for="day_fall_risk_score" string="Score"/><field name="day_fall_risk_score" nolabel="1"/></div>
+</div>
+</div>
+</div>
+<div class="o_nicu_assess_footer">
+<div class="o_nicu_inline o_nicu_comments"><label for="day_comments" string="*Comments"/><field name="day_comments" nolabel="1"/></div>
+<div class="o_nicu_sign_row">
+<div class="o_nicu_inline"><label for="day_sign_date" string="Date"/><field name="day_sign_date" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="day_sign_time" string="Time"/><field name="day_sign_time" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="day_nurse_name" string="Name"/><field name="day_nurse_name" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="day_signature" string="Signature"/><field name="day_signature" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="day_job_no" string="Job No."/><field name="day_job_no" nolabel="1"/></div>
+</div></div></div>
+                            <div class="o_nicu_assess">
+<div class="o_nicu_band">NIGHT</div>
+<div class="row g-2">
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">1. BED TYPE</div>
+<div class="o_nicu_chk"><field name="night_bed_incubator" nolabel="1"/><label for="night_bed_incubator" string="Incubator"/></div>
+<div class="o_nicu_chk"><field name="night_bed_servo" nolabel="1"/><label for="night_bed_servo" string="Servo (°C Baby Mode)"/></div>
+<div class="o_nicu_inline"><label for="night_bed_servo_temp" string="Servo °C"/><field name="night_bed_servo_temp" nolabel="1"/></div>
+<div class="o_nicu_chk"><field name="night_bed_manual" nolabel="1"/><label for="night_bed_manual" string="Manual (°C Air Mode)"/></div>
+<div class="o_nicu_inline"><label for="night_bed_manual_temp" string="Manual °C"/><field name="night_bed_manual_temp" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="night_bed_humidity" string="Humidity %"/><field name="night_bed_humidity" nolabel="1"/></div>
+<div class="o_nicu_chk"><field name="night_bed_radiant" nolabel="1"/><label for="night_bed_radiant" string="Radiant Warmer"/></div>
+<div class="o_nicu_chk"><field name="night_bed_skin_temp" nolabel="1"/><label for="night_bed_skin_temp" string="Skin Temp. Mode"/></div>
+<div class="o_nicu_chk"><field name="night_bed_cot" nolabel="1"/><label for="night_bed_cot" string="Cot"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">2. SKIN</div>
+<div class="o_nicu_chk"><field name="night_skin_intact" nolabel="1"/><label for="night_skin_intact" string="Intact"/></div>
+<div class="o_nicu_chk"><field name="night_skin_dry_warm" nolabel="1"/><label for="night_skin_dry_warm" string="Dry/Warm"/></div>
+<div class="o_nicu_chk"><field name="night_skin_diaphoretic" nolabel="1"/><label for="night_skin_diaphoretic" string="Diaphoretic"/></div>
+<div class="o_nicu_chk"><field name="night_skin_cracked" nolabel="1"/><label for="night_skin_cracked" string="Cracked/Peeling"/></div>
+<div class="o_nicu_chk"><field name="night_skin_oedema" nolabel="1"/><label for="night_skin_oedema" string="Oedema"/></div>
+<div class="o_nicu_chk"><field name="night_skin_lesions" nolabel="1"/><label for="night_skin_lesions" string="Lesions/Wounds*"/></div>
+<div class="o_nicu_chk"><field name="night_skin_bruising" nolabel="1"/><label for="night_skin_bruising" string="Bruising"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">3. COLOUR</div>
+<div class="o_nicu_chk"><field name="night_colour_pink" nolabel="1"/><label for="night_colour_pink" string="Pink"/></div>
+<div class="o_nicu_chk"><field name="night_colour_pale" nolabel="1"/><label for="night_colour_pale" string="Pale"/></div>
+<div class="o_nicu_chk"><field name="night_colour_dusky" nolabel="1"/><label for="night_colour_dusky" string="Dusky"/></div>
+<div class="o_nicu_chk"><field name="night_colour_mottled" nolabel="1"/><label for="night_colour_mottled" string="Mottled"/></div>
+<div class="o_nicu_chk"><field name="night_colour_jaundice" nolabel="1"/><label for="night_colour_jaundice" string="Jaundice"/></div>
+<div class="o_nicu_chk"><field name="night_colour_plethoric" nolabel="1"/><label for="night_colour_plethoric" string="Plethoric"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">4. EYES</div>
+<div class="o_nicu_chk"><field name="night_eyes_clear" nolabel="1"/><label for="night_eyes_clear" string="Clear"/></div>
+<div class="o_nicu_chk"><field name="night_eyes_discharge" nolabel="1"/><label for="night_eyes_discharge" string="Discharge"/></div>
+<div class="o_nicu_chk"><field name="night_eyes_puffy" nolabel="1"/><label for="night_eyes_puffy" string="Puffy"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">5. NEUROLOGIC/FONTANELLES</div>
+<div class="o_nicu_chk"><field name="night_neuro_soft_flat" nolabel="1"/><label for="night_neuro_soft_flat" string="Soft / Flat"/></div>
+<div class="o_nicu_chk"><field name="night_neuro_full_tense" nolabel="1"/><label for="night_neuro_full_tense" string="Full / Tense"/></div>
+<div class="o_nicu_chk"><field name="night_neuro_depressed" nolabel="1"/><label for="night_neuro_depressed" string="Depressed"/></div>
+<div class="o_nicu_chk"><field name="night_neuro_bulging" nolabel="1"/><label for="night_neuro_bulging" string="Bulging"/></div>
+<div class="o_nicu_inline"><label for="night_neuro_head_circ" string="Head Circumference (cm)"/><field name="night_neuro_head_circ" nolabel="1"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">6. TONE</div>
+<div class="o_nicu_chk"><field name="night_tone_wnl" nolabel="1"/><label for="night_tone_wnl" string="WNL for GA"/></div>
+<div class="o_nicu_chk"><field name="night_tone_hypotonic" nolabel="1"/><label for="night_tone_hypotonic" string="Hypotonic"/></div>
+<div class="o_nicu_chk"><field name="night_tone_flaccid" nolabel="1"/><label for="night_tone_flaccid" string="Flaccid"/></div>
+<div class="o_nicu_chk"><field name="night_tone_hypertonic" nolabel="1"/><label for="night_tone_hypertonic" string="Hypertonic"/></div>
+<div class="o_nicu_chk"><field name="night_tone_rigid" nolabel="1"/><label for="night_tone_rigid" string="Rigid"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">7. CAPILLARY REFILL</div>
+<div class="o_nicu_chk"><field name="night_cap_brisk" nolabel="1"/><label for="night_cap_brisk" string="Brisk"/></div>
+<div class="o_nicu_chk"><field name="night_cap_slow" nolabel="1"/><label for="night_cap_slow" string="Slow"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">8. CARDIOVASCULAR</div>
+<div class="o_nicu_sub">Heart sounds</div>
+<div class="o_nicu_chk"><field name="night_cv_regular" nolabel="1"/><label for="night_cv_regular" string="Regular"/></div>
+<div class="o_nicu_chk"><field name="night_cv_irregular" nolabel="1"/><label for="night_cv_irregular" string="Irregular"/></div>
+<div class="o_nicu_chk"><field name="night_cv_murmur" nolabel="1"/><label for="night_cv_murmur" string="Murmur"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">9. PULSES</div>
+<div class="o_nicu_sub">Brachial</div>
+<div class="o_nicu_chk"><field name="night_pulse_br_equal" nolabel="1"/><label for="night_pulse_br_equal" string="Equal"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_br_bounding" nolabel="1"/><label for="night_pulse_br_bounding" string="Bounding"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_br_weak" nolabel="1"/><label for="night_pulse_br_weak" string="Weak"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_br_strong" nolabel="1"/><label for="night_pulse_br_strong" string="Strong"/></div>
+<div class="o_nicu_sub">Femoral</div>
+<div class="o_nicu_chk"><field name="night_pulse_fe_equal" nolabel="1"/><label for="night_pulse_fe_equal" string="Equal"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_fe_bounding" nolabel="1"/><label for="night_pulse_fe_bounding" string="Bounding"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_fe_weak" nolabel="1"/><label for="night_pulse_fe_weak" string="Weak"/></div>
+<div class="o_nicu_chk"><field name="night_pulse_fe_strong" nolabel="1"/><label for="night_pulse_fe_strong" string="Strong"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">10. ABDOMEN</div>
+<div class="o_nicu_chk"><field name="night_abd_soft" nolabel="1"/><label for="night_abd_soft" string="Soft"/></div>
+<div class="o_nicu_chk"><field name="night_abd_firm" nolabel="1"/><label for="night_abd_firm" string="Firm"/></div>
+<div class="o_nicu_chk"><field name="night_abd_flat" nolabel="1"/><label for="night_abd_flat" string="Flat"/></div>
+<div class="o_nicu_chk"><field name="night_abd_distention" nolabel="1"/><label for="night_abd_distention" string="Distention"/></div>
+<div class="o_nicu_chk"><field name="night_abd_loops" nolabel="1"/><label for="night_abd_loops" string="Bowel Loops Visible"/></div>
+<div class="o_nicu_chk"><field name="night_abd_bs_present" nolabel="1"/><label for="night_abd_bs_present" string="Bowel Sounds Present"/></div>
+<div class="o_nicu_chk"><field name="night_abd_bs_absent" nolabel="1"/><label for="night_abd_bs_absent" string="Bowel Sounds Absent"/></div>
+<div class="o_nicu_chk"><field name="night_abd_redness" nolabel="1"/><label for="night_abd_redness" string="Redness Discoloration"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">11. SKIN RISK ASSESSMENT SCORE</div>
+<div class="o_nicu_inline"><label for="night_skin_risk_score" string="Score"/><field name="night_skin_risk_score" nolabel="1"/></div>
+</div>
+</div>
+<div class="col-12 col-md-6 col-xl-3">
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">12. RESPIRATORY</div>
+<div class="o_nicu_sub">Breath sounds</div>
+<div class="o_nicu_chk"><field name="night_resp_equal" nolabel="1"/><label for="night_resp_equal" string="Equal bilaterally"/></div>
+<div class="o_nicu_sub">R / L</div>
+<div class="o_nicu_chk"><field name="night_resp_unequal_r" nolabel="1"/><label for="night_resp_unequal_r" string="Unequal - R"/></div>
+<div class="o_nicu_chk"><field name="night_resp_unequal_l" nolabel="1"/><label for="night_resp_unequal_l" string="Unequal - L"/></div>
+<div class="o_nicu_chk"><field name="night_resp_clear_r" nolabel="1"/><label for="night_resp_clear_r" string="Clear - R"/></div>
+<div class="o_nicu_chk"><field name="night_resp_clear_l" nolabel="1"/><label for="night_resp_clear_l" string="Clear - L"/></div>
+<div class="o_nicu_chk"><field name="night_resp_crackles_r" nolabel="1"/><label for="night_resp_crackles_r" string="Crackles - R"/></div>
+<div class="o_nicu_chk"><field name="night_resp_crackles_l" nolabel="1"/><label for="night_resp_crackles_l" string="Crackles - L"/></div>
+<div class="o_nicu_chk"><field name="night_resp_rales_r" nolabel="1"/><label for="night_resp_rales_r" string="Rales - R"/></div>
+<div class="o_nicu_chk"><field name="night_resp_rales_l" nolabel="1"/><label for="night_resp_rales_l" string="Rales - L"/></div>
+<div class="o_nicu_chk"><field name="night_resp_chest_equal" nolabel="1"/><label for="night_resp_chest_equal" string="Equal chest movement"/></div>
+<div class="o_nicu_chk"><field name="night_resp_labored" nolabel="1"/><label for="night_resp_labored" string="Labored"/></div>
+<div class="o_nicu_chk"><field name="night_resp_unlabored" nolabel="1"/><label for="night_resp_unlabored" string="Unlaboured"/></div>
+<div class="o_nicu_chk"><field name="night_resp_shallow" nolabel="1"/><label for="night_resp_shallow" string="Shallow"/></div>
+<div class="o_nicu_chk"><field name="night_resp_grunting" nolabel="1"/><label for="night_resp_grunting" string="Grunting"/></div>
+<div class="o_nicu_chk"><field name="night_resp_flaring" nolabel="1"/><label for="night_resp_flaring" string="Nasal Flaring"/></div>
+<div class="o_nicu_sub">Retractions</div>
+<div class="o_nicu_chk"><field name="night_resp_retr_mild" nolabel="1"/><label for="night_resp_retr_mild" string="Mild"/></div>
+<div class="o_nicu_chk"><field name="night_resp_retr_moderate" nolabel="1"/><label for="night_resp_retr_moderate" string="Moderate"/></div>
+<div class="o_nicu_chk"><field name="night_resp_retr_severe" nolabel="1"/><label for="night_resp_retr_severe" string="Severe"/></div>
+<div class="o_nicu_inline"><label for="night_resp_last_cxr" string="Last chest x-ray"/><field name="night_resp_last_cxr" nolabel="1"/></div>
+</div>
+<div class="o_nicu_assess_group"><div class="o_nicu_assess_h">13. FALL RISK ASSESSMENT</div>
+<div class="o_nicu_inline"><label for="night_fall_risk_score" string="Score"/><field name="night_fall_risk_score" nolabel="1"/></div>
+</div>
+</div>
+</div>
+<div class="o_nicu_assess_footer">
+<div class="o_nicu_inline o_nicu_comments"><label for="night_comments" string="*Comments"/><field name="night_comments" nolabel="1"/></div>
+<div class="o_nicu_sign_row">
+<div class="o_nicu_inline"><label for="night_sign_date" string="Date"/><field name="night_sign_date" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="night_sign_time" string="Time"/><field name="night_sign_time" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="night_nurse_name" string="Name"/><field name="night_nurse_name" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="night_signature" string="Signature"/><field name="night_signature" nolabel="1"/></div>
+<div class="o_nicu_inline"><label for="night_job_no" string="Job No."/><field name="night_job_no" nolabel="1"/></div>
+</div></div></div>
+                        </page>
+                        <page string="Progress Evaluation" name="progress">
+                            <div class="text-muted small mb-1">Each entry must be dated &amp; signed.</div>
+                            <field name="note_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="date" width="100px"/>
+                                    <field name="time" width="70px"/>
+                                    <field name="note" widget="text"/>
+                                    <field name="nurse_id" column_invisible="1"/>
+                                    <field name="signature" width="160px"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_nicu_chart_list" model="ir.ui.view">
+        <field name="name">nicu.chart.list</field>
+        <field name="model">nicu.chart</field>
+        <field name="arch" type="xml">
+            <list string="Neonatal ICU Charts">
+                <field name="date"/>
+                <field name="patient_id"/>
+                <field name="mrn"/>
+                <field name="diagnosis"/>
+                <field name="consultant"/>
+                <field name="age_days"/>
+                <field name="present_weight"/>
+                <field name="total_actual_intake"/>
+                <field name="total_output"/>
+                <field name="fluid_balance"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_nicu_chart_search" model="ir.ui.view">
+        <field name="name">nicu.chart.search</field>
+        <field name="model">nicu.chart</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="patient_id"/>
+                <field name="mrn"/>
+                <field name="diagnosis"/>
+                <field name="consultant"/>
+                <filter name="today" string="Today" domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_date" string="Date" date="date"/>
+                <group>
+                    <filter name="group_patient" string="Patient" context="{'group_by': 'patient_id'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_nicu_chart_calendar" model="ir.ui.view">
+        <field name="name">nicu.chart.calendar</field>
+        <field name="model">nicu.chart</field>
+        <field name="arch" type="xml">
+            <calendar string="NICU Charts" date_start="date" mode="month" color="patient_id" quick_create="0">
+                <field name="patient_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_nicu_chart" model="ir.actions.act_window">
+        <field name="name">Neonatal ICU Charts</field>
+        <field name="res_model">nicu.chart</field>
+        <field name="view_mode">list,form,calendar</field>
+        <field name="search_view_id" ref="view_nicu_chart_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first Neonatal ICU Chart</p>
+            <p>One chart per baby per day, exactly like the paper chart.</p>
+        </field>
+    </record>
+
+    <record id="action_nicu_patient" model="ir.actions.act_window">
+        <field name="name">NICU Patients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_nicu_patient', '=', True)]</field>
+        <field name="context">{'default_is_nicu_patient': True, 'default_company_type': 'person'}</field>
+    </record>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_nicu" model="ir.ui.view">
+        <field name="name">res.partner.form.nicu</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_nicu_charts" type="object" class="oe_stat_button" icon="fa-heartbeat"
+                        invisible="not is_nicu_patient" groups="nicu_chart.group_nicu_nurse">
+                    <field name="nicu_chart_count" widget="statinfo" string="NICU Charts"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="NICU" name="nicu" groups="nicu_chart.group_nicu_nurse">
+                    <group>
+                        <group>
+                            <field name="is_nicu_patient"/>
+                            <field name="nicu_mrn" invisible="not is_nicu_patient"/>
+                            <field name="nicu_birth_date" invisible="not is_nicu_patient"/>
+                            <field name="nicu_blood_group" invisible="not is_nicu_patient"/>
+                        </group>
+                        <group invisible="not is_nicu_patient">
+                            <label for="nicu_ga_weeks" string="Gestational age"/>
+                            <div class="o_row">
+                                <field name="nicu_ga_weeks" class="oe_inline"/> weeks +
+                                <field name="nicu_ga_days" class="oe_inline"/> days
+                            </div>
+                            <field name="nicu_birth_weight"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

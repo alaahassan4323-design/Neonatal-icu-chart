@@ -1,0 +1,133 @@
+// Neonatal ICU chart - keep the screen close to the paper chart
+.o_nicu_form {
+    .o_nicu_brand {
+        font-weight: 700;
+        letter-spacing: .08em;
+        color: #3a8fc7;
+        font-size: .9rem;
+    }
+    .o_nicu_band {
+        background: #d9d9d9;
+        border: 1px solid #888;
+        font-weight: 700;
+        text-align: center;
+        padding: 2px 6px;
+        font-size: .82rem;
+        letter-spacing: .03em;
+        color: #222;
+    }
+    // hourly grids: compact cells, grey parameter column, horizontal scroll
+    .o_nicu_grid {
+        width: 100%;
+        .o_list_renderer {
+            overflow-x: auto;
+        }
+        table.o_list_table {
+            font-size: .78rem;
+            th, td {
+                padding: 2px 3px !important;
+                border: 1px solid #c8c8c8;
+                text-align: center;
+            }
+            thead th {
+                background: #e9e9e9;
+                font-weight: 700;
+            }
+            td.o_nicu_param, td[name="name"] {
+                background: #f2f2f2;
+                font-weight: 600;
+                text-align: left;
+                white-space: nowrap;
+            }
+            td.o_nicu_side, td[name="side_label"] {
+                color: #b03030;
+                font-size: .7rem;
+                text-align: left;
+            }
+            td[name="note"] {
+                text-align: left;
+                font-style: italic;
+            }
+            input {
+                text-align: center;
+                padding: 0;
+            }
+        }
+    }
+    .o_nicu_graph {
+        border: 1px solid #888;
+        margin-top: 4px;
+        overflow-x: auto;
+        background: #fff;
+        svg { min-width: 900px; }
+    }
+    .o_nicu_vital_legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: .8rem;
+        padding: 4px 2px;
+    }
+    .o_nicu_legend table {
+        width: 100%;
+        font-size: .74rem;
+        border-collapse: collapse;
+        th, td {
+            border: 1px solid #999;
+            padding: 2px 4px;
+            vertical-align: top;
+        }
+        th { background: #eee; }
+    }
+    .o_nicu_compact .o_cell { padding-top: 0; padding-bottom: 0; }
+    .o_nicu_special textarea { min-height: 220px; }
+
+    // physical assessment
+    .o_nicu_assess {
+        border: 1px solid #888;
+        margin-top: 12px;
+        padding-bottom: 6px;
+        .row { padding: 6px 8px 0; }
+    }
+    .o_nicu_assess_group { margin-bottom: 8px; }
+    .o_nicu_assess_h {
+        font-weight: 700;
+        font-size: .8rem;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 2px;
+    }
+    .o_nicu_sub {
+        font-weight: 600;
+        font-style: italic;
+        font-size: .76rem;
+        margin-top: 2px;
+    }
+    .o_nicu_chk {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: .8rem;
+        line-height: 1.5;
+        .o_field_widget { width: auto; }
+        label { font-weight: normal; margin: 0; }
+    }
+    .o_nicu_inline {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: .8rem;
+        label { white-space: nowrap; font-weight: 600; margin: 0; }
+        .o_field_widget { flex: 1 1 auto; min-width: 60px; }
+    }
+    .o_nicu_assess_footer {
+        border-top: 1px solid #ccc;
+        margin: 4px 8px 0;
+        padding-top: 4px;
+        .o_nicu_comments { margin-bottom: 4px; }
+        .o_nicu_sign_row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 6px 12px;
+        }
+    }
+}

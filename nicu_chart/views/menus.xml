@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_nicu_root" name="Neonatal ICU" sequence="45"
+              web_icon="nicu_chart,static/description/icon.png"
+              groups="group_nicu_nurse"/>
+    <menuitem id="menu_nicu_charts" name="ICU Charts" parent="menu_nicu_root"
+              action="action_nicu_chart" sequence="10"/>
+    <menuitem id="menu_nicu_patients" name="Patients" parent="menu_nicu_root"
+              action="action_nicu_patient" sequence="20"/>
+</odoo>
